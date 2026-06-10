@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'splash_screen_two.dart';
+import '../auth/auth_screen.dart';
 
 class SplashScreenThree extends StatelessWidget {
   const SplashScreenThree({super.key});
@@ -606,97 +607,120 @@ class SplashScreenThree extends StatelessWidget {
                 const SizedBox(height: 35),
 
                 /// BUTTONS
-                Row(
-                  children: [
+Row(
+  children: [
 
-                    Container(
-                      height: 55,
-                      width: 55,
+    /// BACK BUTTON
+    Container(
+      height: 55,
+      width: 55,
 
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.circular(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(18),
 
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Colors.black.withOpacity(
-                                    0.05),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
+        boxShadow: [
+          BoxShadow(
+            color:
+                Colors.black.withOpacity(
+                    0.05),
+            blurRadius: 10,
+          )
+        ],
+      ),
 
-                      child: IconButton(
-                        icon:
-                            const Icon(Icons.arrow_back),
+      child: IconButton(
+        icon:
+            const Icon(Icons.arrow_back),
 
-                        onPressed: () {
+        onPressed: () {
 
-                          Navigator.push(
-                            context,
+          Navigator.push(
+            context,
 
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const SplashScreenTwo(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+            MaterialPageRoute(
+              builder: (context) =>
+                  const SplashScreenTwo(),
+            ),
+          );
+        },
+      ),
+    ),
 
-                    const SizedBox(width: 15),
+    const SizedBox(width: 15),
 
-                    Expanded(
-                      child: Container(
-                        height: 55,
+    /// GET STARTED BUTTON
+    Expanded(
+      child: GestureDetector(
 
-                        decoration: BoxDecoration(
-                          gradient:
-                              LinearGradient(
-                            colors: [
-                              Colors.orange
-                                  .shade400,
-                              Colors.orange
-                                  .shade600,
-                            ],
-                          ),
+        onTap: () {
 
-                          borderRadius:
-                              BorderRadius.circular(
-                                  18),
-                        ),
+          Navigator.push(
+            context,
 
-                        child: const Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
+            MaterialPageRoute(
+              builder: (context) =>
+                  const AuthScreen(),
+            ),
+          );
+        },
 
-                          children: [
+        child: Container(
+          height: 55,
 
-                            Text(
-                              "Get Started",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight:
-                                    FontWeight.w600,
-                                fontSize: 17,
-                              ),
-                            ),
+          decoration: BoxDecoration(
+            gradient:
+                LinearGradient(
+              colors: [
+                Colors.orange.shade400,
+                Colors.orange.shade600,
+              ],
+            ),
 
-                            SizedBox(width: 10),
+            borderRadius:
+                BorderRadius.circular(
+                    18),
 
-                            Icon(
-                              Icons.rocket_launch,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.orange
+                    .withOpacity(0.25),
+                blurRadius: 10,
+              )
+            ],
+          ),
+
+          child: const Row(
+            mainAxisAlignment:
+                MainAxisAlignment.center,
+
+            children: [
+
+              Text(
+                "Get Started",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight:
+                      FontWeight.w600,
+                  fontSize: 17,
                 ),
+              ),
+
+              SizedBox(width: 10),
+
+              Icon(
+                Icons.rocket_launch,
+                color: Colors.white,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  ],
+),
 
                 const SizedBox(height: 20),
 

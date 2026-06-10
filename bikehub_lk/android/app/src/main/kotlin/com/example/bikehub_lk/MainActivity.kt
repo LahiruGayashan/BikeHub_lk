@@ -1,4 +1,4 @@
-package com.example.bikehub_lk
+package com.example.motoxchange
 
 import io.flutter.embedding.android.FlutterActivity
 

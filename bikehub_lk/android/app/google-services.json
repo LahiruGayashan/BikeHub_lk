@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "999946139752",
+    "project_id": "motoxsell",
+    "storage_bucket": "motoxsell.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999946139752:android:31dea8a9a61829548a23dd",
+        "android_client_info": {
+          "package_name": "com.example.motoxchange"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9IOI0rYXDHK0JYG-Lexsme7fSSqB9sl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
