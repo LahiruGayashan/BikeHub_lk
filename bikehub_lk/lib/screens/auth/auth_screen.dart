@@ -25,10 +25,41 @@ class _AuthScreenState
 
   final nameController =
       TextEditingController();
+/// DISTRICT DROPDOWN
+  String? selectedDistrict;
+
+  final List<String> districts = [
+    "Ampara",
+    "Anuradhapura",
+    "Badulla",
+    "Batticaloa",
+    "Colombo",
+    "Galle",
+    "Gampaha",
+    "Hambantota",
+    "Jaffna",
+    "Kalutara",
+    "Kandy",
+    "Kegalle",
+    "Kilinochchi",
+    "Kurunegala",
+    "Mannar",
+    "Matale",
+    "Matara",
+    "Monaragala",
+    "Mullaitivu",
+    "Nuwara Eliya",
+    "Polonnaruwa",
+    "Puttalam",
+    "Ratnapura",
+    "Trincomalee",
+    "Vavuniya",
+  ];
 
   bool isLogin = true;
   bool isEmail = true;
   bool obscurePassword = true;
+
 
   @override
   Widget build(BuildContext context) {
@@ -309,6 +340,8 @@ class _AuthScreenState
                       icon: Icons.phone,
                     ),
 
+
+
                   const SizedBox(height: 20),
 
                   buildPasswordField(),
@@ -421,6 +454,67 @@ class _AuthScreenState
 
                   const SizedBox(height: 20),
 
+                  
+Column(
+  crossAxisAlignment:
+      CrossAxisAlignment.start,
+
+  children: [
+
+    const Text(
+      "District",
+      style: TextStyle(
+        color: Colors.black54,
+      ),
+    ),
+
+    const SizedBox(height: 10),
+
+    Container(
+      padding:
+          const EdgeInsets.symmetric(
+        horizontal: 15,
+      ),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(18),
+        border: Border.all(
+          color: Colors.grey.shade300,
+        ),
+      ),
+
+      child: DropdownButtonFormField<String>(
+        value: selectedDistrict,
+
+        decoration:
+            const InputDecoration(
+          border: InputBorder.none,
+        ),
+
+        hint: const Text(
+          "Select District",
+        ),
+
+        items: districts.map((district) {
+          return DropdownMenuItem(
+            value: district,
+            child: Text(district),
+          );
+        }).toList(),
+
+        onChanged: (value) {
+          setState(() {
+            selectedDistrict = value;
+          });
+        },
+      ),
+    ),
+  ],
+),
+
+
                   buildPasswordField(),
 
                   const SizedBox(height: 30),
@@ -446,19 +540,16 @@ class _AuthScreenState
                       if (user != null) {
 
                         /// SAVE USER
-                        await FirestoreService()
-                            .saveUser(
-                          uid: user.uid,
-                          name:
-                              nameController.text
-                                  .trim(),
-                          email:
-                              emailController.text
-                                  .trim(),
-                          phone:
-                              phoneController.text
-                                  .trim(),
-                        );
+                        
+await FirestoreService()
+    .saveUser(
+  uid: user.uid,
+  name: nameController.text.trim(),
+  email: emailController.text.trim(),
+  phone: phoneController.text.trim(),
+  location: selectedDistrict ?? '',
+);
+
 
                         /// SUCCESS POPUP
                         ScaffoldMessenger.of(

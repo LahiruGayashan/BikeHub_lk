@@ -5,12 +5,12 @@ class FirestoreService {
   final FirebaseFirestore _firestore =
       FirebaseFirestore.instance;
 
-  /// SAVE USER
   Future<void> saveUser({
     required String uid,
     required String name,
     required String email,
     required String phone,
+    required String location,
   }) async {
 
     await _firestore
@@ -18,12 +18,13 @@ class FirestoreService {
         .doc(uid)
         .set({
 
-      'uid': uid,
       'name': name,
       'email': email,
       'phone': phone,
+      'location': location,
+      'imageUrl': '',
       'createdAt':
-          DateTime.now(),
+          FieldValue.serverTimestamp(),
     });
   }
 }

@@ -1,14 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../auth/auth_screen.dart';
 import 'edit_profile_screen.dart';
 import '../../widgets/bottom_nav_bar.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() =>
+      _ProfileScreenState();
+}
+
+class _ProfileScreenState
+    extends State<ProfileScreen> {
+
+  @override
+
+  Future<Map<String, dynamic>?> getUserData() async {
+  final uid =
+      FirebaseAuth.instance.currentUser!.uid;
+
+  final doc =
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+  return doc.data();
+}
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF5F9FD),
@@ -62,163 +85,273 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 30),
 
               /// PROFILE CARD
-              Container(
-                padding: const EdgeInsets.all(20),
+             FutureBuilder<Map<String, dynamic>?>(
+  future: getUserData(),
+  builder: (context, snapshot) {
 
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+    if (!snapshot.hasData) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
+    final user = snapshot.data!;
 
+final String name =
+    user['name'] ?? 'User';
+
+final String location =
+    user['location'] ?? '';
+
+final String phone =
+    user['phone'] ?? '';
+
+final String imageUrl =
+    user['imageUrl'] ?? '';
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(30),
+
+        boxShadow: [
+          BoxShadow(
+            color:
+                Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+
+      child: Column(
+        children: [
+
+          Row(
+            children: [
+
+              GestureDetector(
+  onTap: () {
+    if (imageUrl.isEmpty) return;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+
+          child: Container(
+            width: 280,
+            height: 280,
+
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+
+              image: DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
+
+              border: Border.all(
+                color: Colors.white,
+                width: 4,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  },
+
+  child: CircleAvatar(
+    radius: 60,
+    backgroundColor: Colors.orange.shade100,
+
+    backgroundImage:
+        imageUrl.isNotEmpty
+            ? NetworkImage(imageUrl)
+            : null,
+
+    child: imageUrl.isEmpty
+        ? const Icon(
+            Icons.person,
+            size: 45,
+            color: Colors.orange,
+          )
+        : null,
+  ),
+),
+              const SizedBox(width: 15),
+
+              Expanded(
                 child: Column(
+                  crossAxisAlignment:
+                      CrossAxisAlignment
+                          .start,
+
                   children: [
+
+                    Text(
+                      name,//call
+                      style:
+                          const TextStyle(
+                        fontSize: 24,
+                        fontWeight:
+                            FontWeight.w600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 5),
+
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.orange.shade100,
 
-                          child: const Icon(
-                            Icons.person,
-                            size: 45,
-                            color: Colors.orange,
-                          ),
+                        const Icon(
+                          Icons.location_on,
+                          color:
+                              Colors.orange,
+                          size: 18,
                         ),
 
-                        const SizedBox(width: 15),
+                        const SizedBox(
+                            width: 4),
 
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-
-                            children: [
-                              const Text(
-                                "Gayashan",
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              const SizedBox(height: 5),
-
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.location_on,
-                                    color: Colors.orange,
-                                    size: 18,
-                                  ),
-
-                                  const SizedBox(width: 4),
-
-                                  Text(
-                                    "Sri Lanka",
-                                    style: TextStyle(
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 10),
-
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
-                                ),
-
-                                decoration: BoxDecoration(
-                                  color: Colors.green.shade50,
-
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-
-                                  children: const [
-                                    Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                      size: 16,
-                                    ),
-
-                                    SizedBox(width: 5),
-
-                                    Text(
-                                      "Verified",
-                                      style: TextStyle(color: Colors.green),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        Text(
+                          location,//call
+                          style: TextStyle(
+                            color: Colors
+                                .grey
+                                .shade600,
                           ),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 25),
+                    const SizedBox(
+                        height: 10),
 
-                    /// STATS
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       Row(
+  children: [
+    const Icon(
+      Icons.phone,
+      size: 16,
+      color: Colors.orange,
+    ),
+    const SizedBox(width: 5),
+    Text(phone),
+  ],
+),
 
-                      children: [
-                        statCard("12", "Listings"),
+const SizedBox(
+  height: 10,
+), 
 
-                        statCard("8", "Sold"),
+                    Container(
+                      padding:
+                          const EdgeInsets
+                              .symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
 
-                        statCard("4.9", "Rating"),
+                      decoration:
+                          BoxDecoration(
+                        color: Colors
+                            .green
+                            .shade50,
 
-                        statCard("2.1k", "Views"),
-                      ],
-                    ),
+                        borderRadius:
+                            BorderRadius
+                                .circular(
+                                    20),
+                      ),
 
-                    const SizedBox(height: 25),
+                      child: const Row(
+                        mainAxisSize:
+                            MainAxisSize.min,
 
-                    /// EDIT PROFILE BUTTON
-                    SizedBox(
-                      width: double.infinity,
-                      height: 55,
+                        children: [
 
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
+                          Icon(
+                            Icons.check,
+                            color:
+                                Colors.green,
+                            size: 16,
                           ),
-                        ),
 
-                        onPressed: () {
-                          Navigator.push(
-                            context,
+                          SizedBox(width: 5),
 
-                            MaterialPageRoute(
-                              builder: (context) => const EditProfileScreen(),
+                          Text(
+                            "Verified",
+                            style:
+                                TextStyle(
+                              color: Colors
+                                  .green,
                             ),
-                          );
-                        },
-
-                        child: const Text(
-                          "Edit Profile",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
+            ],
+          ),
+
+          const SizedBox(height: 25),
+
+          Row(
+            mainAxisAlignment:
+                MainAxisAlignment
+                    .spaceBetween,
+            children: [
+              statCard("12", "Listings"),
+              statCard("8", "Sold"),
+              statCard("4.9", "Rating"),
+              statCard("2.1k", "Views"),
+            ],
+          ),
+
+          const SizedBox(height: 25),
+
+          SizedBox(
+            width: double.infinity,
+            height: 55,
+
+            child: ElevatedButton(
+              style:
+                  ElevatedButton.styleFrom(
+                backgroundColor:
+                    Colors.orange,
+              ),
+
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const EditProfileScreen(),
+                  ),
+                );
+
+                setState(() {});
+              },
+
+              child: const Text(
+                "Edit Profile",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  },
+),
 
               const SizedBox(height: 30),
 
